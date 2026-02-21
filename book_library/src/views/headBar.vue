@@ -1,10 +1,10 @@
 <script setup>
 import { BookCopy } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
-import Avatar from "./ui/avatar/Avatar.vue";
-import AvatarImage from "./ui/avatar/AvatarImage.vue";
+import Avatar from "../components/ui/avatar/Avatar.vue";
+import AvatarImage from "../components/ui/avatar/AvatarImage.vue";
 import { Bell } from "lucide-vue-next";
-import Button from "./ui/button/Button.vue";
+import Button from "../components/ui/button/Button.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -45,11 +45,19 @@ function isClick() {
         margin-top: 10px;
       "
     >
-      <div style="display: flex">
+      <div style="display: flex; align-items: center">
         <div style="display: flex; align-items: center">
-          <BookCopy color="#137FEC" />
-          <div style="width: 10px"></div>
-          <h2 style="color: white; font-weight: 700">Library Manager</h2>
+          <Button
+            @click="goTo('/')"
+            variant="ghost"
+            class="flex items-center bg-transparent hover:bg-transparent p-0 text-white"
+          >
+            <BookCopy color="#137FEC" :size="22" />
+
+            <h2 style="color: white; font-weight: 700; font-size: 20px">
+              Library Manager
+            </h2>
+          </Button>
         </div>
 
         <div style="width: 4rem"></div>

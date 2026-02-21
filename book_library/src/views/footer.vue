@@ -1,15 +1,15 @@
 <script setup>
 import { BookCopy } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
-import Avatar from "./ui/avatar/Avatar.vue";
-import AvatarImage from "./ui/avatar/AvatarImage.vue";
+import Avatar from "../components/ui/avatar/Avatar.vue";
+import AvatarImage from "../components/ui/avatar/AvatarImage.vue";
 import { Bell } from "lucide-vue-next";
-import Button from "./ui/button/Button.vue";
+import Button from "../components/ui/button/Button.vue";
 
 const router = useRouter();
 const route = useRoute();
 
-function goTo(path) {
+/* function goTo(path) {
   router.push(path);
 }
 
@@ -19,7 +19,7 @@ function isActive(path) {
 
 function isClick() {
   console.log("Hello World");
-}
+} */
 </script>
 
 <template>
@@ -29,10 +29,14 @@ function isClick() {
       height: 80px;
       background-color: #101922;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     "
   >
+    <div
+      style="background-color: rgb(35, 54, 72); height: 1px; width: 100%"
+    ></div>
     <div
       style="
         width: 80%;
@@ -58,8 +62,6 @@ function isClick() {
             font-weight: 400;
             color: #94a3b8;
           "
-          :style="isActive('/books') ? 'color: white;' : ''"
-          @click="goTo('/books')"
         >
           Terms of Service
         </span>
@@ -70,8 +72,6 @@ function isClick() {
             font-weight: 400;
             color: #94a3b8;
           "
-          :style="isActive('/authors') ? 'color: white;' : ''"
-          @click="goTo('/authors')"
         >
           Privacy
         </span>
@@ -82,8 +82,6 @@ function isClick() {
             font-weight: 400;
             color: #94a3b8;
           "
-          :style="isActive('/categories') ? 'color: white;' : ''"
-          @click="goTo('/categories')"
         >
           Categories
         </span>
