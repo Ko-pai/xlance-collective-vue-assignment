@@ -74,7 +74,7 @@ export async function updateBook(
     author: changes.author ?? current.author,
     category: changes.category ?? current.category,
     status: changes.status ?? current.status,
-    imgUrl : changes.imgUrl ?? current.imgUrl,
+    imgUrl: changes.imgUrl ?? current.imgUrl,
     publishedYear: changes.publishedYear ?? current.publishedYear,
     summary: changes.summary ?? current.summary,
     createdAt: current.createdAt,

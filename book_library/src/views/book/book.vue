@@ -50,7 +50,14 @@ function goToEdit(id: string) {
 <template>
   <div class="flex justify-center bg-[#101922]">
     <div class="w-full max-w-7xl h-full mt-5 px-4 mb-10">
-      <BookDirectory @book-added="loadBooks" />
+      <BookDirectory
+        @book-added="loadBooks"
+        mode="book"
+        title="Book Directory"
+        subtitle="Manage your Book List in the order you would like to show. Add new
+            books, edit the existing books and delete the books according to
+            your needing."
+      />
 
       <div class="max-w-md bg-transparent mb-10">
         <Input
@@ -140,7 +147,7 @@ function goToEdit(id: string) {
                     variant="ghost"
                     size="icon"
                     class="text-slate-300 hover:bg-slate-800 hover:text-emerald-400"
-                    @click=""
+                    @click="goToEdit(book.id)"
                   >
                     <Pencil class="w-4 h-4" />
                   </Button>

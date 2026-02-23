@@ -1,0 +1,62 @@
+[
+  {
+    "id": "57e6086b-3b02-436f-8f9c-5291c3741497",
+    "createdAt": "2026-02-23T06:15:44.689Z",
+    "updatedAt": "2026-02-23T06:15:44.689Z",
+    "name": "George R.R. Martin",
+    "nationality": "American",
+    "imgUrl": "",
+    "genre": ["Fantasy", "Sci-Fi"],
+    "bio": ""
+  },
+  {
+    "id": "41bd2016-7a86-4a9d-9bfe-572cb82d5e82",
+    "createdAt": "2026-02-23T06:52:54.213Z",
+    "updatedAt": "2026-02-23T06:52:54.213Z",
+    "name": "Harper Lee",
+    "nationality": "American",
+    "imgUrl": "",
+    "genre": ["Fantasy", "Fiction"],
+    "bio": ""
+  },
+  {
+    "id": "f56deed7-1342-4058-8fda-4b0d98b157d9",
+    "createdAt": "2026-02-23T07:31:51.636Z",
+    "updatedAt": "2026-02-23T07:31:51.636Z",
+    "name": "J.K. Rowling",
+    "nationality": "British",
+    "genre": ["Fantasy", "Young"],
+    "imgUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "6aa672f7-93e3-4de5-b06c-e4204b660241",
+    "createdAt": "2026-02-23T07:32:25.740Z",
+    "updatedAt": "2026-02-23T07:32:25.740Z",
+    "name": "Haruki Murakami",
+    "nationality": "Japanese",
+    "genre": ["Surealism", "Fiction"],
+    "imgUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "e5740c82-c08b-4cd6-b309-28d4a487d971",
+    "createdAt": "2026-02-23T07:33:19.025Z",
+    "updatedAt": "2026-02-23T07:33:19.025Z",
+    "name": "Gabriel Garcia Marquez",
+    "nationality": "Colombian",
+    "genre": ["Fantasy", "Sci-Fi"],
+    "imgUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "8d4e7fe6-8192-4ea2-bfb0-dccc9edf5def",
+    "createdAt": "2026-02-23T07:33:50.918Z",
+    "updatedAt": "2026-02-23T07:33:50.918Z",
+    "name": "Chinmamanda Ngozi Adichie",
+    "nationality": "Nigerian",
+    "genre": ["Feminism", "African Lit"],
+    "imgUrl": "",
+    "bio": ""
+  }
+]

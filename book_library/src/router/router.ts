@@ -5,6 +5,8 @@ import HelloWorld from "../components/HelloWorld.vue";
 import Book from "@/views/book/book.vue";
 import EditBook from "@/views/book/editBook.vue";
 import AddBook from "@/views/book/addBook.vue";
+import Author from "@/views/author/author.vue";
+import AddAuthor from "@/views/author/addAuthor.vue";
 
 const routes = [
   {
@@ -29,7 +31,12 @@ const routes = [
   {
     path: "/authors",
     name: "authors",
-    component: HelloWorld,
+    component: Author,
+  },
+  {
+    path: "/addAuthor",
+    name: "addAuthor",
+    component: AddAuthor,
   },
   {
     path: "/categories",
