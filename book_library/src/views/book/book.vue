@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import type { Book } from "@/models/book";
 import { deleteBook, getBooks } from "@/services/bookService";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2, Book as BookIcon } from "lucide-vue-next";
 import Button from "@/components/ui/button/Button.vue";
 import { useRouter } from "vue-router";
 import BookDirectory from "../book_directory.vue";
@@ -48,7 +48,7 @@ function goToEdit(id: string) {
 </script>
 
 <template>
-  <div class="flex justify-center bg-[#101922]">
+  <div class="flex justify-center bg-brand-main">
     <div class="w-full max-w-7xl h-full mt-5 px-4 mb-10">
       <BookDirectory
         @book-added="loadBooks"
@@ -64,11 +64,11 @@ function goToEdit(id: string) {
           v-model="searchQuery"
           placeholder="Search books by title, author, or category..."
           variant="search"
-          class="bg-[#0F172A] border-slate-800 hover:border-transparent focus:border-slate-800 text-white px-4"
+          class="bg-brand-input border-slate-800 hover:border-transparent focus:border-slate-800 text-white px-4"
         />
       </div>
       <div
-        class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-[#162033]"
+        class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-brand-table"
       >
         <table class="w-full border-collapse">
           <thead>
@@ -86,24 +86,28 @@ function goToEdit(id: string) {
             <tr
               v-for="book in filteredBooks"
               :key="book.id"
-              class="bg-[#0f172a] hover:bg-[#162033] transition-colors border-t border-slate-800"
+              class="bg-brand-input hover:bg-brand-table transition-colors border-t border-slate-800"
             >
               <td class="px-6 py-4">
                 <div class="flex items-center gap-4">
                   <div
-                    class="flex relative h-16 w-12 items-center justify-center rounded-md bg-slate-900 text-slate-500 text-xs"
+                    class="flex relative h-16 w-12 items-center justify-center rounded-md text-slate-500 text-xs"
+                    :class="[
+                      book.imgUrl
+                        ? 'bg-slate-900'
+                        : 'bg-brand-edit border border-slate-700',
+                    ]"
                   >
-                    <div
-                      class="absolute left-0 top-6 bottom-2 w-1 h-5 rounded-full bg-slate-600/70"
-                    ></div>
                     <img
-                      :src="
-                        book.imgUrl ??
-                        'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg'
-                      "
+                      v-if="book.imgUrl"
+                      :src="book.imgUrl"
                       alt=""
                       class="h-full w-full rounded-[5px] object-cover"
                     />
+
+                    <div
+                      class="absolute left-0 top-6 bottom-2 w-1 h-5 rounded-full bg-slate-600/70"
+                    ></div>
                   </div>
                   <div class="flex flex-col">
                     <span class="text-sm font-semibold text-slate-50">

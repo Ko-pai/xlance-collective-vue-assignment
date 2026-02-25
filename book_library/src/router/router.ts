@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HelloWorld from "../components/HelloWorld.vue";
-
-// import Home from "@/views/book_directory.vue";
 import Book from "@/views/book/book.vue";
 import EditBook from "@/views/book/editBook.vue";
 import AddBook from "@/views/book/addBook.vue";
 import Author from "@/views/author/author.vue";
 import AddAuthor from "@/views/author/addAuthor.vue";
+import EditAuthor from "@/views/author/editAuthor.vue";
+import Category from "@/views/category/category.vue";
+import AddCategory from "@/views/category/addCategory.vue";
+import EditCategory from "@/views/category/editCategory.vue";
 
 const routes = [
   {
@@ -39,9 +40,24 @@ const routes = [
     component: AddAuthor,
   },
   {
+    path: "/authors/:id/editAuthor",
+    name: "author-edit",
+    component: EditAuthor,
+  },
+  {
     path: "/categories",
     name: "categories",
-    component: HelloWorld,
+    component: Category,
+  },
+  {
+    path: "/addCategory",
+    name: "addCategory",
+    component: AddCategory,
+  },
+  {
+    path: "/categories/:id/editCategory",
+    name: "categories-edit",
+    component: EditCategory,
   },
 ];
 

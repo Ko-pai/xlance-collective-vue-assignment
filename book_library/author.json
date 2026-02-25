@@ -6,7 +6,7 @@
     "name": "George R.R. Martin",
     "nationality": "American",
     "imgUrl": "",
-    "genre": ["Fantasy", "Sci-Fi"],
+    "genre": "Fantasy ,Sci-Fi",
     "bio": ""
   },
   {
@@ -16,7 +16,7 @@
     "name": "Harper Lee",
     "nationality": "American",
     "imgUrl": "",
-    "genre": ["Fantasy", "Fiction"],
+    "genre": "Fantasy, Fiction",
     "bio": ""
   },
   {
@@ -25,7 +25,7 @@
     "updatedAt": "2026-02-23T07:31:51.636Z",
     "name": "J.K. Rowling",
     "nationality": "British",
-    "genre": ["Fantasy", "Young"],
+    "genre": "Fantasy, Young",
     "imgUrl": "",
     "bio": ""
   },
@@ -35,7 +35,7 @@
     "updatedAt": "2026-02-23T07:32:25.740Z",
     "name": "Haruki Murakami",
     "nationality": "Japanese",
-    "genre": ["Surealism", "Fiction"],
+    "genre": "Surealism, Fiction",
     "imgUrl": "",
     "bio": ""
   },
@@ -45,7 +45,7 @@
     "updatedAt": "2026-02-23T07:33:19.025Z",
     "name": "Gabriel Garcia Marquez",
     "nationality": "Colombian",
-    "genre": ["Fantasy", "Sci-Fi"],
+    "genre": "Fantasy, Sci-Fi",
     "imgUrl": "",
     "bio": ""
   },
@@ -55,7 +55,7 @@
     "updatedAt": "2026-02-23T07:33:50.918Z",
     "name": "Chinmamanda Ngozi Adichie",
     "nationality": "Nigerian",
-    "genre": ["Feminism", "African Lit"],
+    "genre": "Feminism, African Lit",
     "imgUrl": "",
     "bio": ""
   }

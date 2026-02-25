@@ -8,6 +8,7 @@ import { deleteAuthor, getAuthor } from "@/services/authorService";
 import type { Author } from "@/models/author";
 import type { Book } from "@/models/book";
 import { getBooks } from "@/services/bookService";
+import { router } from "@/router/router";
 
 const books = ref<Book[]>([]);
 const authors = ref<Author[]>([]);
@@ -15,6 +16,10 @@ const searchQuery = ref("");
 
 async function loadBooks() {
   books.value = await getBooks();
+}
+
+function goToEdit(id: string) {
+  router.push(`/authors/${id}/editAuthor`);
 }
 
 const filteredAuthors = computed(() => {
@@ -33,6 +38,7 @@ const filteredAuthors = computed(() => {
 
 async function loadAuthor() {
   authors.value = await getAuthor();
+  console.log("run authr load", authors.value);
 }
 
 const authorBookCounts = computed(() => {
@@ -69,7 +75,7 @@ async function handleDelete(id: string) {
 </script>
 
 <template>
-  <div class="flex justify-center bg-[#101922]">
+  <div class="flex justify-center bg-brand-main">
     <div class="w-full max-w-7xl h-full mt-5 px-4 mb-10">
       <BookDirectory
         @book-added="loadAuthor"
@@ -83,11 +89,11 @@ async function handleDelete(id: string) {
           v-model="searchQuery"
           placeholder="Filter by name or nationality..."
           variant="search"
-          class="bg-[#0F172A] border-slate-800 hover:border-transparent focus:border-slate-800 text-white px-4"
+          class="bg-brand-input border-slate-800 hover:border-transparent focus:border-slate-800 text-white px-4"
         />
       </div>
       <div
-        class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-[#162033]"
+        class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-brand-table"
       >
         <table class="w-full border-collapse">
           <thead>
@@ -104,7 +110,7 @@ async function handleDelete(id: string) {
             <tr
               v-for="author in filteredAuthors"
               :key="author.id"
-              class="bg-[#0f172a] hover:bg-[#162033] transition-colors border-t border-slate-800"
+              class="bg-brand-input hover:bg-brand-table transition-colors border-t border-slate-800"
             >
               <td class="px-6 py-4">
                 <div class="flex items-center gap-4">
@@ -113,7 +119,7 @@ async function handleDelete(id: string) {
                   >
                     <h1
                       v-if="!author.imgUrl"
-                      class="uppercase font-bold text-[18px]"
+                      class="uppercase font-bold text-[18px] text-blue-500"
                     >
                       {{
                         author.name
@@ -138,7 +144,7 @@ async function handleDelete(id: string) {
                       {{ author.name }}
                     </span>
                     <span class="text-xs text-slate-500">
-                      {{ (author.genre ?? []).join(", ") }}
+                      {{ author.genre ?? "" }}
                     </span>
                   </div>
                 </div>
@@ -158,7 +164,7 @@ async function handleDelete(id: string) {
                   </span>
                   <div class="h-1.5 w-20 rounded-full bg-slate-700/60">
                     <div
-                      class="h-1.5 rounded-full bg-[#2D8CFF]"
+                      class="h-1.5 rounded-full bg-brand-progress-blue"
                       :style="{
                         width: getAuthorBookProgressWidth(author.name),
                       }"
@@ -173,7 +179,7 @@ async function handleDelete(id: string) {
                     variant="ghost"
                     size="icon"
                     class="text-slate-300 hover:bg-slate-800 hover:text-emerald-400"
-                    @click="loadBooks"
+                    @click="goToEdit(author.id)"
                   >
                     <Pencil class="w-4 h-4" />
                   </Button>

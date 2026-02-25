@@ -87,6 +87,51 @@ export async function updateBook(
   return updated;
 }
 
+export async function updateBooksAuthorName(
+  previousName: string,
+  nextName: string,
+): Promise<void> {
+  const books = loadBooks();
+  let updatedCount = 0;
+
+  const updatedBooks = books.map((book) => {
+    if (book.author !== previousName) {
+      return book;
+    }
+    updatedCount += 1;
+    return {
+      ...book,
+      author: nextName,
+    };
+  });
+
+  if (updatedCount > 0) {
+    saveBooks(updatedBooks);
+  }
+}
+export async function updateBooksCategory(
+  previousName: string,
+  nextName: string,
+): Promise<void> {
+  const books = loadBooks();
+  let updatedCount = 0;
+
+  const updatedBooks = books.map((book) => {
+    if (book.category !== previousName) {
+      return book;
+    }
+    updatedCount += 1;
+    return {
+      ...book,
+      category: nextName,
+    };
+  });
+
+  if (updatedCount > 0) {
+    saveBooks(updatedBooks);
+  }
+}
+
 export async function deleteBook(id: string): Promise<void> {
   const books = loadBooks();
   const filtered = books.filter((b) => b.id !== id);

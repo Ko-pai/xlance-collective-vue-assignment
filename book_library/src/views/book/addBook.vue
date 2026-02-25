@@ -21,7 +21,7 @@ function goto() {
 </script>
 
 <template>
-  <div class="flex justify-center bg-[#101922] min-h-[calc(90vh)]">
+  <div class="flex justify-center bg-brand-main min-h-[calc(90vh)]">
     <div class="w-full max-w-7xl h-full mt-5 px-4">
       <Breadcrumb class="px-4">
         <BreadcrumbList>
@@ -48,7 +48,7 @@ function goto() {
       <div class="h-12"></div>
 
       <div class="flex flex-col gap-6 ml-4">
-        <div class="flex justify-center bg-[#101922]">
+        <div class="flex justify-center bg-brand-main">
           <div class="w-full max-w-7xl h-full">
             <div
               class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
@@ -63,7 +63,7 @@ function goto() {
               </div>
 
               <button
-                class="w-full md:w-40 h-10 bg-[#233648] text-white flex items-center justify-center rounded-lg text-xs md:text-base font-normal"
+                class="w-full md:w-40 h-10 bg-brand-card text-white flex items-center justify-center rounded-lg text-xs md:text-base font-normal"
                 @click="goto"
               >
                 Back to List
@@ -78,8 +78,7 @@ function goto() {
           <NewBookForm />
         </div>
 
-      <div class="h-12"></div>
-        
+        <div class="h-12"></div>
       </div>
     </div>
   </div>

@@ -18,6 +18,8 @@ import {
   Save,
 } from "lucide-vue-next";
 import { getAuthor } from "@/services/authorService";
+import { getCategories } from "@/services/categoryService";
+import { f } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 const props = withDefaults(
   defineProps<{
@@ -66,17 +68,11 @@ watch(
 );
 
 onMounted(async () => {
-  const books = await getBooks();
   const authors = await getAuthor();
-  const categories = new Set<string>();
-  for (const book of books) {
-    // if (book.author) authors.add(book.author);
-    if (book.category) categories.add(book.category);
-  }
+  const categories = await getCategories();
+
   authorOptions.value = authors.map((a) => a.name);
-  categoryOptions.value = Array.from(categories).sort((a, b) =>
-    a.localeCompare(b),
-  );
+  categoryOptions.value = categories.map((a) => a.name);
 });
 
 const errors = ref<Record<string, string>>({});
@@ -228,7 +224,7 @@ onMounted(async () => {
   <form
     @submit.prevent="handleSubmit"
     class="mt-6 w-full max-w-3xl mx-auto rounded-2xl border border-slate-800 px-6 py-8 md:px-8 md:py-10 text-slate-100"
-    :class="[isEdit ? 'bg-transparent border-none' : 'bg-[#233648]']"
+    :class="[isEdit ? 'bg-transparent border-none' : 'bg-brand-card']"
   >
     <div class="space-y-4" :class="[isEdit ? 'hidden' : '']">
       <h2 class="text-[20px] font-semibold text-slate-200">Cover Image</h2>
@@ -236,8 +232,8 @@ onMounted(async () => {
         class="flex flex-col items-center justify-center rounded-xl border border-dashed px-6 py-8 text-center transition"
         :class="[
           isDragActive
-            ? 'border-[#137fec] bg-[#0b1f33]'
-            : 'border-slate-700 bg-[#192633]',
+            ? 'border-brand-primary bg-brand-dropzone'
+            : 'border-slate-700 bg-brand-edit',
         ]"
         @dragover="handleDragOver"
         @dragleave="handleDragLeave"
@@ -261,7 +257,7 @@ onMounted(async () => {
           @keydown.space.prevent="openFilePicker"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#0b1524]"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-icon"
           >
             <ImageUp class="h-5 w-5 text-slate-300" />
           </div>
@@ -273,7 +269,7 @@ onMounted(async () => {
 
         <div
           v-if="form.imgUrl"
-          class="mt-5 w-[160px] h-[150px] max-w-sm bg-[#9BB7A7] p-5 rounded-sm bg-cover bg-center"
+          class="mt-5 w-[160px] h-[150px] max-w-sm bg-brand-cover-placeholder p-5 rounded-sm bg-cover bg-center"
           :style="{ backgroundImage: `url(${form.imgUrl})` }"
         ></div>
 
@@ -299,7 +295,7 @@ onMounted(async () => {
       class="flex flex-col"
       :class="[
         isEdit
-          ? 'border p-5 border-slate-700 bg-[#192633] rounded-lg h-auto'
+          ? 'border p-5 border-slate-700 bg-brand-edit rounded-lg h-auto'
           : 'hidden',
       ]"
     >
@@ -307,7 +303,7 @@ onMounted(async () => {
         class="flex flex-col items-center justify-center rounded-xl px-6 py-8 text-center transition"
         :class="[
           isDragActive
-            ? 'border-[#137fec] bg-[#0b1f33]'
+            ? 'border-brand-primary bg-brand-dropzone'
             : 'border-slate-700 bg-transparent',
         ]"
         @dragover="handleDragOver"
@@ -332,7 +328,7 @@ onMounted(async () => {
           @keydown.space.prevent="openFilePicker"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#0b1524]"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-icon"
           >
             <ImageUp class="h-5 w-5 text-slate-300" />
           </div>
@@ -344,7 +340,7 @@ onMounted(async () => {
 
         <div
           v-if="form.imgUrl"
-          class="mt-5 w-[160px] h-[150px] max-w-sm bg-[#9BB7A7] p-5 rounded-sm bg-cover bg-center"
+          class="mt-5 w-[160px] h-[150px] max-w-sm bg-brand-cover-placeholder p-5 rounded-sm bg-cover bg-center"
           :style="{ backgroundImage: `url(${form.imgUrl})` }"
         ></div>
 
@@ -370,7 +366,7 @@ onMounted(async () => {
       class="flex flex-col"
       :class="[
         isEdit
-          ? 'border p-5 border-slate-700 bg-[#192633] rounded-lg mt-8'
+          ? 'border p-5 border-slate-700 bg-brand-edit rounded-lg mt-8'
           : '',
       ]"
     >
@@ -387,20 +383,20 @@ onMounted(async () => {
         Update the core details and categorization for this title.
       </p>
       <hr
-        class="my-4 border-gray-700 border-t"
+        class="my-4 border-gray-700"
         :class="[isEdit ? '' : 'hidden']"
       />
 
       <div class="space-y-4" :class="[isEdit ? '' : 'mt-4']">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-[14px] font-medium text-slate-400 mb-1">
+            <label class="block text-[14px] font-medium text-slate-100 mb-1">
               Book Title
             </label>
             <Input
               v-model="form.title"
               placeholder="e.g. The Great Gatsby"
-              class="bg-[#101922] border-slate-700 text-white"
+              class="bg-brand-main border-slate-700 text-white"
             />
             <p v-if="errors.title" class="mt-1 text-xs text-red-400">
               {{ errors.title }}
@@ -408,13 +404,13 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-[14px] font-medium text-slate-400 mb-1">
+            <label class="block text-[14px] font-medium text-slate-100 mb-1">
               Published Year
             </label>
             <Input
               v-model="form.publishedYear"
               placeholder="e.g. 1925"
-              class="bg-[#101922] border-slate-700 text-white"
+              class="bg-brand-main border-slate-700 text-white"
             />
             <p v-if="errors.publishedYear" class="mt-1 text-xs text-red-400">
               {{ errors.publishedYear }}
@@ -422,18 +418,24 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-[14px] font-medium text-slate-400 mb-1">
+            <label class="block text-[14px] font-medium text-slate-100 mb-1">
               Author
             </label>
             <div class="relative mt-0.5">
               <select
                 v-model="form.author"
-                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-[#101922] pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
+                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-brand-main pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
               >
                 <option v-if="authorOptions.length === 0" value="" disabled>
                   No authors found
                 </option>
-                <option v-else value="" disabled>Select an author</option>
+                <option v-else-if="!isEdit" value="" disabled>
+                  Select an author
+                </option>
+                <option v-else-if="isEdit" :value="form.author" disabled>
+                  {{ form.author }}
+                </option>
+
                 <option
                   v-for="author in authorOptions"
                   :key="author"
@@ -452,13 +454,13 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-[14px] font-medium text-slate-400 mb-1">
+            <label class="block text-[14px] font-medium text-slate-100 mb-1">
               Category
             </label>
             <div class="relative mt-0.5">
               <select
                 v-model="form.category"
-                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-[#101922] pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
+                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-brand-main pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
               >
                 <option v-if="categoryOptions.length === 0" value="" disabled>
                   No categories found
@@ -482,13 +484,13 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-[14px] font-medium text-slate-400 mb-1">
+            <label class="block text-[14px] font-medium text-slate-100 mb-1">
               Availability Status
             </label>
             <div class="relative mt-0.5">
               <select
                 v-model="form.status"
-                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-[#101922] pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
+                class="flex h-9 w-full appearance-none rounded-md border border-slate-700 bg-brand-main pl-3 pr-10 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
               >
                 <option value="available">Available</option>
                 <option value="borrowed">Borrowed</option>
@@ -503,16 +505,24 @@ onMounted(async () => {
       </div>
 
       <div class="mt-8 space-y-3">
-        <h2 class="text-[20px] font-semibold text-slate-200">Description</h2>
+        <h2
+          class=" font-semibold text-slate-200"
+          :class="[isEdit ? 'text-[14px]' : 'text-[20px]']"
+        >
+          Description {{ isEdit ? "/ Summary" : "" }}
+        </h2>
         <div>
-          <label class="block text-[14px] font-[400] text-slate-400 mb-2">
+          <label
+            class="block text-[14px] font-[400] text-slate-400 mb-2"
+            :class="[isEdit ? 'hidden' : '']"
+          >
             Book Summary
           </label>
           <textarea
             v-model="form.summary"
             maxlength="250"
             rows="4"
-            class="w-full rounded-md border border-slate-700 bg-[#101922] px-3 py-2 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
+            class="w-full rounded-md border border-slate-700 bg-brand-main px-3 py-2 text-sm text-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-500"
             placeholder="Brief overview of the book's plot and themes..."
           ></textarea>
         </div>
@@ -529,7 +539,7 @@ onMounted(async () => {
         </Button>
         <Button
           type="submit"
-          class="bg-[#137FEC] hover:bg-[#0f68c1] text-white w-[200px] h-10"
+          class="bg-brand-primary hover:bg-brand-primary-hover text-white w-[200px] h-10"
           :disabled="isSubmitting"
         >
           {{ props.mode === "edit" ? "Upload Book" : "Add to Library" }}

@@ -1,12 +1,11 @@
-export type BookStatus = "available" | "unavailable" | "borrowed";
-
 export interface Author {
   id: string;
   name: string;
   nationality: string;
   imgUrl?: string;
   bio?: string;
-  genre? : string[];
+  genre? : string;
+  dateOfBirth? : string
   createdAt: string;
   updatedAt: string;
 }

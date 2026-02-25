@@ -3,6 +3,7 @@ import type {
   NewAuthorInput,
   UpdateAuthorInput,
 } from "@/models/author";
+import { updateBooksAuthorName } from "@/services/bookService";
 import fetchAuthor from "../../author.json";
 
 const STORAGE_KEY = "author-data:authors";
@@ -71,18 +72,25 @@ export async function updateAuthor(
 
   const current = authors[index] as Author;
 
+  const nextName = changes.name ?? current.name;
+
   const update: Author = {
     id: current.id,
-    name: changes.name ?? current.name,
+    name: nextName,
     nationality: changes.nationality ?? current.nationality,
     bio: changes.bio ?? current.bio,
     imgUrl: changes.imgUrl ?? current.imgUrl,
+    genre: changes.genre ?? current.genre,
+    dateOfBirth: changes.dateOfBirth ?? current.dateOfBirth,
     createdAt: current.createdAt,
     updatedAt: new Date().toISOString(),
   };
 
   authors[index] = update;
   saveAuthor(authors);
+  if (nextName !== current.name) {
+    await updateBooksAuthorName(current.name, nextName);
+  }
   return update;
 }
 

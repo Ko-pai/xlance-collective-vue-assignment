@@ -6,8 +6,7 @@ import BreadcrumbItem from "@/components/ui/breadcrumb/BreadcrumbItem.vue";
 import BreadcrumbLink from "@/components/ui/breadcrumb/BreadcrumbLink.vue";
 import BreadcrumbSeparator from "@/components/ui/breadcrumb/BreadcrumbSeparator.vue";
 import { useRoute, useRouter } from "vue-router";
-import AuthorForm from "./authorForm.vue";
-// import NewBookForm from "./newBookForm.vue";
+import CategoryForm from "./categoryForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -28,19 +27,19 @@ function goto() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink
-              href="/authors"
+              href="/categories"
               class="hover:text-white"
-              :class="isActive('/authors') ? 'text-white' : ''"
+              :class="isActive('/categories') ? 'text-white' : ''"
             >
-              Authors
+              Categories
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
               class="hover:text-white cursor-pointer"
-              :class="isActive('/addAuthor') ? 'text-white' : ''"
-              >Add New Author</BreadcrumbLink
+              :class="isActive('/addCategory') ? 'text-white' : ''"
+              >Add New Category</BreadcrumbLink
             >
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -56,10 +55,11 @@ function goto() {
             >
               <div class="flex flex-col gap-2 max-w-xl">
                 <h1 class="text-2xl md:text-4xl text-white font-semibold">
-                  Add New Author
+                  Add New Category
                 </h1>
                 <p class="text-sm md:text-base text-slate-400 font-normal">
-                  Fill in the details to expand the library collection.
+                  Organize your collection by defining a new genre or
+                  classification.
                 </p>
               </div>
 
@@ -76,7 +76,7 @@ function goto() {
         </div>
 
         <div class="w-full flex justify-center mt-6">
-          <AuthorForm mode="create" />
+          <CategoryForm mode="create" />
         </div>
 
         <div class="h-12"></div>

@@ -5,6 +5,7 @@ import Avatar from "../components/ui/avatar/Avatar.vue";
 import AvatarImage from "../components/ui/avatar/AvatarImage.vue";
 import { Bell } from "lucide-vue-next";
 import Button from "../components/ui/button/Button.vue";
+import { colors } from "@/utils/colors";
 
 const router = useRouter();
 const route = useRoute();
@@ -24,64 +25,41 @@ function isClick() {
 
 <template>
   <div
-    style="
-      width: 100%;
-      height: 80px;
-      background-color: #101922;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    "
+    class="w-full h-20 flex flex-col items-center justify-center"
+    :style="{ backgroundColor: colors.background.main }"
   >
     <div
-      style="background-color: rgb(35, 54, 72); height: 1px; width: 100%"
+      class="h-[1px] w-full"
+      :style="{ backgroundColor: colors.background.tip }"
     ></div>
-    <div
-      style="
-        width: 80%;
-        height: 80%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      "
-    >
-      <div style="display: flex; align-items: center">
-        <h2 style="color: #94a3b8; font-size: 14px; font-weight: 400">
+    <div class="w-[80%] h-[80%] flex items-center justify-between">
+      <div class="flex items-center">
+        <h2 class="text-sm font-normal" :style="{ color: colors.text.muted }">
           © 2026 Library Management System. All rights reserved.
         </h2>
       </div>
 
-      <div style="width: 4rem"></div>
+      <div class="w-16"></div>
 
-      <div style="display: flex; gap: 24px; color: #a0aec0; font-weight: 500">
+      <div
+        class="flex gap-6 font-medium"
+        :style="{ color: colors.text.mutedDark }"
+      >
         <span
-          style="
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 400;
-            color: #94a3b8;
-          "
+          class="cursor-pointer text-sm font-normal"
+          :style="{ color: colors.text.muted }"
         >
           Terms of Service
         </span>
         <span
-          style="
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 400;
-            color: #94a3b8;
-          "
+          class="cursor-pointer text-sm font-normal"
+          :style="{ color: colors.text.muted }"
         >
           Privacy
         </span>
         <span
-          style="
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 400;
-            color: #94a3b8;
-          "
+          class="cursor-pointer text-sm font-normal"
+          :style="{ color: colors.text.muted }"
         >
           Categories
         </span>

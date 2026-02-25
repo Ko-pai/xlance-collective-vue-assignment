@@ -1,48 +1,31 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import type { Book } from "@/models/book";
-import { getBookById } from "@/services/bookService";
-import { Clock3 } from "lucide-vue-next";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import NewBookForm from "./newBookForm.vue";
 import { Breadcrumb, BreadcrumbList } from "@/components/ui/breadcrumb";
 import BreadcrumbItem from "@/components/ui/breadcrumb/BreadcrumbItem.vue";
 import BreadcrumbLink from "@/components/ui/breadcrumb/BreadcrumbLink.vue";
 import BreadcrumbSeparator from "@/components/ui/breadcrumb/BreadcrumbSeparator.vue";
+import type { Category } from "@/models/category";
+import { getCategoriesById } from "@/services/categoryService";
+import CategoryForm from "./categoryForm.vue";
+import { CATEGORY_BREADCRUMBS } from "@/constants/breadcrumbs";
 
 const route = useRoute();
 const router = useRouter();
-const bookId = route.params.id as string;
+const categoryId = route.params.id as string;
 
-const book = ref<Book | null>(null);
+const category = ref<Category | null>(null);
 
 onMounted(async () => {
-  book.value = await getBookById(bookId);
-});
-
-function onBackLibrary() {
-  router.back();
-}
-
-function formatDateTime(iso: string): string {
-  const date = new Date(iso);
-  return date.toLocaleString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
-
-const lastUpdatedText = computed(() => {
-  if (!book.value) return "Unknown";
-  return formatDateTime(book.value.updatedAt);
+  category.value = await getCategoriesById(categoryId);
 });
 
 function isActive(path: string) {
   return route.path === path;
+}
+
+function onBackToCategoriesList() {
+  router.back();
 }
 </script>
 
@@ -66,28 +49,32 @@ function isActive(path: string) {
           <BreadcrumbItem>
             <BreadcrumbLink
               class="hover:text-white cursor-pointer"
-              :class="isActive(`/books/${book?.id}/edit`) ? 'text-white' : ''"
-              >Edit : {{ book?.title }}</BreadcrumbLink
+              :class="
+                isActive(`/categories/${category?.id}/editCategory`)
+                  ? 'text-white'
+                  : ''
+              "
+              >Edit : {{ category?.name }}</BreadcrumbLink
             >
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <div
-        class="flex bg-red w-full mt-10"
-        style="justify-content: space-between; align-items: center"
-      >
+      <div class="flex bg-red w-full mt-10" style="justify-content: space-between">
         <div>
-          <h1 class="text-2xl font-bold text-white mb-2">Edit Book</h1>
+          <h1 class="text-2xl font-bold text-white mb-2">
+            Edit Category: {{ category?.name }}
+          </h1>
           <div class="flex items-center gap-2 text-slate-400 text-sm">
-            <Clock3 class="w-4 h-4" />
-            <span>Last updated: {{ lastUpdatedText }}</span>
+            <span
+              >Modify the category details and visibility settings for the
+              library catalog.</span
+            >
           </div>
         </div>
         <div>
           <button
             class="w-full md:w-40 h-10 bg-brand-primary text-white flex items-center justify-center rounded-lg text-sm md:text-base font-medium"
-            @click="onBackLibrary"
+            @click="onBackToCategoriesList"
           >
             Back to List
           </button>
@@ -95,7 +82,11 @@ function isActive(path: string) {
       </div>
 
       <div class="w-full flex justify-center mt-6">
-        <NewBookForm v-if="book" :initial-book="book" mode="edit" />
+        <CategoryForm
+          :initial-category="category"
+          mode="edit"
+          :updated-at="category?.updatedAt"
+        />
       </div>
     </div>
   </div>

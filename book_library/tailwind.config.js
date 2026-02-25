@@ -13,6 +13,21 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        brand: {
+          main: '#101922',
+          primary: '#137FEC',
+          'primary-hover': '#0f68c1',
+          input: '#0F172A',
+          table: '#162033',
+          card: '#233648',
+          edit: '#192633',
+          dropzone: '#0b1f33',
+          icon: '#0b1524',
+          tip: '#182A3C',
+          'progress-blue': '#2D8CFF',
+          'tip-text': '#507A9E',
+          'cover-placeholder': '#9BB7A7',
+        },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
