@@ -3,7 +3,7 @@ import type {
   NewCategoryInput,
   UpdateCategoryInput,
 } from "@/models/category";
-import fetchCategory from "../../category.json";
+import { fetchCategories } from "../constants/categories.constant";
 import { updateBooksCategory } from "./bookService";
 
 const STORAGE_KEY = "category-data:categories";
@@ -12,7 +12,7 @@ function loadCategories(): Category[] {
   const raw = window.localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
-    const parsed = fetchCategory as Category[];
+    const parsed = fetchCategories as Category[];
 
     return Array.isArray(parsed) ? parsed : [];
   }

@@ -29,13 +29,15 @@ watch(
 function goTo(addBook: boolean) {
   if (addBook) {
     router.push("/addBook");
-  } else {
-    if (props.mode === "category") {
-      router.push("/addCategory");
-    } else {
-      router.push("/addAuthor");
-    }
+    return;
   }
+
+  if (props.mode === "category") {
+    router.push("/addCategory");
+    return;
+  }
+
+  router.push("/addAuthor");
 }
 </script>
 

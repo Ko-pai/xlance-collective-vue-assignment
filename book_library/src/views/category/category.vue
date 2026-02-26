@@ -8,6 +8,7 @@ import {
   ScrollText,
   Palette,
   BookOpen,
+  type LucideIcon,
 } from "lucide-vue-next";
 import Button from "@/components/ui/button/Button.vue";
 import BookDirectory from "../book_directory.vue";
@@ -18,12 +19,18 @@ import { router } from "@/router/router";
 import type { Category } from "@/models/category";
 import { deleteCategory, getCategories } from "@/services/categoryService";
 import { formatRelativeTime } from "@/utils/formateTime";
+import Table from "@/components/ui/table/Table.vue";
+import TableHeader from "@/components/ui/table/TableHeader.vue";
+import TableRow from "@/components/ui/table/TableRow.vue";
+import TableHead from "@/components/ui/table/TableHead.vue";
+import TableBody from "@/components/ui/table/TableBody.vue";
+import TableCell from "@/components/ui/table/TableCell.vue";
 
 const books = ref<Book[]>([]);
 const categories = ref<Category[]>([]);
 const searchQuery = ref("");
 
-function getCategoryIconComponent(name: string) {
+function getCategoryIconComponent(name: string): LucideIcon {
   const lower = name.toLowerCase();
 
   if (lower.includes("fiction")) {
@@ -45,38 +52,34 @@ function getCategoryIconComponent(name: string) {
   return BookOpen;
 }
 
-function getCategoryIconColorClass(name: string) {
-  const lower = name.toLowerCase();
+function getCategoryIconColorClass(name: string): string {
+  const lower = name.toLowerCase().trim();
 
   if (lower.includes("fiction")) {
-    // fiction → purple
     return "text-purple-400";
   }
 
   if (lower.includes("science")) {
-    // science → blue
-    return "text-blue-600";
+    return "text-blue-700";
   }
 
   if (lower.includes("history")) {
-    // history → yellow
     return "text-yellow-600";
   }
 
   if (lower.includes("art")) {
-    // arts → pink
-    return "text-pink-400";
+    return "text-pink-600";
   }
 
   // default color
   return "text-slate-700";
 }
 
-async function loadBooks() {
+async function loadBooks(): Promise<void> {
   books.value = await getBooks();
 }
 
-function goToEdit(id: string) {
+function goToEdit(id: string): void {
   router.push(`/categories/${id}/editCategory`);
 }
 
@@ -94,9 +97,8 @@ const filterCategories = computed(() => {
   });
 });
 
-async function loadCategories() {
+async function loadCategories(): Promise<void> {
   categories.value = await getCategories();
-  //   console.log("run authr load", authors.value);
 }
 
 const authorBookCounts = computed(() => {
@@ -110,7 +112,7 @@ const authorBookCounts = computed(() => {
   return counts;
 });
 
-function getAuthorBookCount(name: string) {
+function getAuthorBookCount(name: string): number {
   return authorBookCounts.value[name.toLowerCase()] ?? 0;
 }
 
@@ -119,7 +121,7 @@ onMounted(async () => {
   await loadBooks();
 });
 
-async function handleDelete(id: string) {
+async function handleDelete(id: string): Promise<void> {
   await deleteCategory(id);
   await loadCategories();
 }
@@ -146,25 +148,35 @@ async function handleDelete(id: string) {
       <div
         class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-brand-table"
       >
-        <table class="w-full border-collapse">
-          <thead>
-            <tr
-              class="text-sm font-medium capitalize tracking-wide text-slate-400"
+        <Table class="w-full border-collapse">
+          <TableHeader>
+            <TableRow
+              class="text-sm font-medium capitalize tracking-wide text-slate-400 border-b border-slate-800 hover:bg-transparent"
             >
-              <th class="px-6 py-3 text-left font-medium">Category Name</th>
-              <th class="px-6 py-3 text-left font-medium">Description</th>
-              <th class="px-6 py-3 text-left font-medium">Book Count</th>
-              <th class="px-6 py-3 text-left font-medium">Last Updated</th>
-              <th class="px-6 py-3 text-right font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Category Name</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Description</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Book Count</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Last Updated</TableHead
+              >
+              <TableHead class="px-6 py-3 text-right font-medium text-slate-400"
+                >Actions</TableHead
+              >
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow
               v-for="category in filterCategories"
               :key="category.id"
               class="bg-brand-input hover:bg-brand-table transition-colors border-t border-slate-800"
             >
-              <td class="px-6 py-4">
+              <TableCell class="px-6 py-4">
                 <div class="flex items-center gap-4">
                   <div
                     class="flex relative h-12 w-12 items-center justify-center rounded-sm bg-white text-slate-500 text-xs"
@@ -184,21 +196,23 @@ async function handleDelete(id: string) {
                     </span>
                   </div>
                 </div>
-              </td>
-              <td class="pl-6 py-4">
+              </TableCell>
+              <TableCell class="pl-6 py-4">
                 <span
                   class="inline-flex max-w-xs text-xs font-medium text-slate-400 overflow-hidden text-ellipsis whitespace-nowrap"
                 >
                   {{ category.description }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <div class="flex items-center gap-3">
                   <span
                     class="inline-flex text-xs font-medium rounded-full bg-slate-100 px-3 py-1 text-blue-500"
-                    style="font-weight: 700;"
+                    style="font-weight: 700"
                     :class="[
-                      getAuthorBookCount(category.name) === 0 ? 'bg-slate-800 text-slate-400' : ''
+                      getAuthorBookCount(category.name) === 0
+                        ? 'bg-slate-800 text-slate-400'
+                        : '',
                     ]"
                   >
                     {{ getAuthorBookCount(category.name) }}
@@ -207,13 +221,13 @@ async function handleDelete(id: string) {
                     }}
                   </span>
                 </div>
-              </td>
-              <td class="px-7 py-4">
+              </TableCell>
+              <TableCell class="px-7 py-4">
                 <span class="text-sm text-slate-100">
                   {{ formatRelativeTime(category.updatedAt) }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <div class="flex justify-end gap-2">
                   <Button
                     variant="ghost"
@@ -232,18 +246,18 @@ async function handleDelete(id: string) {
                     <Trash2 class="w-4 h-4" />
                   </Button>
                 </div>
-              </td>
-            </tr>
-            <tr v-if="filterCategories.length === 0">
-              <td
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="filterCategories.length === 0">
+              <TableCell
                 colspan="5"
                 class="px-6 py-8 text-center text-sm text-slate-500 border-t border-slate-800"
               >
                 No categories found. Use the Add Category button to create one.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </div>
   </div>

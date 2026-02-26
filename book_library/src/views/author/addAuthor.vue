@@ -7,7 +7,6 @@ import BreadcrumbLink from "@/components/ui/breadcrumb/BreadcrumbLink.vue";
 import BreadcrumbSeparator from "@/components/ui/breadcrumb/BreadcrumbSeparator.vue";
 import { useRoute, useRouter } from "vue-router";
 import AuthorForm from "./authorForm.vue";
-// import NewBookForm from "./newBookForm.vue";
 
 const route = useRoute();
 const router = useRouter();

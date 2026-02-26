@@ -25,12 +25,9 @@ function isClick() {
 
 <template>
   <div
-    class="w-full h-[70px] flex flex-col items-center justify-center"
-    :style="{ backgroundColor: colors.background.main }"
+    class="w-full h-[70px] flex flex-col items-center justify-center bg-brand-main"
   >
-    <div
-      class="w-[80%] h-[80%] flex items-center justify-between mb-[10px] mt-[10px]"
-    >
+    <div class="w-4/5 h-4/5 flex items-center justify-between mb-2 mt-2">
       <div class="flex items-center">
         <div class="flex items-center">
           <Button
@@ -46,10 +43,7 @@ function isClick() {
 
         <div class="w-16"></div>
 
-        <div
-          class="flex gap-6 font-medium"
-          :style="{ color: colors.text.mutedDark }"
-        >
+        <div class="flex gap-6 font-medium text-brand-muted">
           <span
             class="cursor-pointer"
             :style="isActive('/books') ? 'color: white;' : ''"
@@ -82,14 +76,13 @@ function isClick() {
           class="text-white hover:bg-transparent hover:text-white"
         >
           <div
-            class="w-[35px] h-[35px] rounded-[20%] flex items-center justify-center"
-            :style="{ backgroundColor: colors.background.formCard }"
+            class="w-12 h-10 rounded-md flex items-center justify-center bg-brand-formCard"
           >
             <Bell :size="20" color="white" />
           </div>
         </Button>
 
-        <span class="w-[10px]"></span>
+        <span class="w-3"></span>
         <Avatar>
           <AvatarImage
             src="https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg"

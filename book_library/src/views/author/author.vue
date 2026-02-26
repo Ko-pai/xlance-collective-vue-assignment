@@ -9,16 +9,23 @@ import type { Author } from "@/models/author";
 import type { Book } from "@/models/book";
 import { getBooks } from "@/services/bookService";
 import { router } from "@/router/router";
+import { MAX_AUTHOR_BOOKS } from "@/constants/author";
+import Table from "@/components/ui/table/Table.vue";
+import TableBody from "@/components/ui/table/TableBody.vue";
+import TableCell from "@/components/ui/table/TableCell.vue";
+import TableHead from "@/components/ui/table/TableHead.vue";
+import TableHeader from "@/components/ui/table/TableHeader.vue";
+import TableRow from "@/components/ui/table/TableRow.vue";
 
 const books = ref<Book[]>([]);
 const authors = ref<Author[]>([]);
 const searchQuery = ref("");
 
-async function loadBooks() {
+async function loadBooks():Promise<void>  {
   books.value = await getBooks();
 }
 
-function goToEdit(id: string) {
+function goToEdit(id: string):void {
   router.push(`/authors/${id}/editAuthor`);
 }
 
@@ -36,9 +43,8 @@ const filteredAuthors = computed(() => {
   });
 });
 
-async function loadAuthor() {
+async function loadAuthor(): Promise<void> {
   authors.value = await getAuthor();
-  console.log("run authr load", authors.value);
 }
 
 const authorBookCounts = computed(() => {
@@ -52,13 +58,11 @@ const authorBookCounts = computed(() => {
   return counts;
 });
 
-function getAuthorBookCount(name: string) {
+function getAuthorBookCount(name: string): number {
   return authorBookCounts.value[name.toLowerCase()] ?? 0;
 }
 
-const MAX_AUTHOR_BOOKS = 30;
-
-function getAuthorBookProgressWidth(name: string) {
+function getAuthorBookProgressWidth(name: string):string {
   const count = Math.min(getAuthorBookCount(name), MAX_AUTHOR_BOOKS);
   return `${Math.round((count / MAX_AUTHOR_BOOKS) * 100)}%`;
 }
@@ -68,9 +72,22 @@ onMounted(async () => {
   await loadBooks();
 });
 
-async function handleDelete(id: string) {
+async function handleDelete(id: string): Promise<void> {
   await deleteAuthor(id);
   await loadAuthor();
+}
+
+function formatAuthorName(name: string): string {
+  const result = name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.replace(/\W/g, ""))
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("");
+
+  return result;
 }
 </script>
 
@@ -95,24 +112,32 @@ async function handleDelete(id: string) {
       <div
         class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-brand-table"
       >
-        <table class="w-full border-collapse">
-          <thead>
-            <tr
-              class="text-sm font-medium capitalize tracking-wide text-slate-400"
+        <Table class="w-full border-collapse">
+          <TableHeader>
+            <TableRow
+              class="text-sm font-medium capitalize tracking-wide border-b border-slate-800 hover:bg-transparent"
             >
-              <th class="px-6 py-3 text-left font-medium">Author</th>
-              <th class="px-6 py-3 text-left font-medium">Nationality</th>
-              <th class="px-6 py-3 text-left font-medium">Catalog Size</th>
-              <th class="px-6 py-3 text-right font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Author</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Nationality</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Catalog Size</TableHead
+              >
+              <TableHead class="px-6 py-3 text-right font-medium text-slate-400"
+                >Actions</TableHead
+              >
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow
               v-for="author in filteredAuthors"
               :key="author.id"
               class="bg-brand-input hover:bg-brand-table transition-colors border-t border-slate-800"
             >
-              <td class="px-6 py-4">
+              <TableCell class="px-6 py-4">
                 <div class="flex items-center gap-4">
                   <div
                     class="flex relative h-14 w-14 items-center justify-center rounded-[50%] bg-white text-slate-500 text-xs"
@@ -121,16 +146,7 @@ async function handleDelete(id: string) {
                       v-if="!author.imgUrl"
                       class="uppercase font-bold text-[18px] text-blue-500"
                     >
-                      {{
-                        author.name
-                          .split(/\s+/)
-                          .filter(Boolean)
-                          .map((part) => part.replace(/\W/g, ""))
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((part) => part[0])
-                          .join("")
-                      }}
+                      {{ formatAuthorName(author.name) }}
                     </h1>
                     <img
                       v-else
@@ -148,15 +164,15 @@ async function handleDelete(id: string) {
                     </span>
                   </div>
                 </div>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <span
                   class="inline-flex rounded-full bg-slate-800/60 px-3 py-1 text-xs font-medium text-slate-200"
                 >
                   {{ author.nationality }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <div class="flex items-center gap-3">
                   <span class="inline-flex text-xs font-medium text-slate-200">
                     {{ getAuthorBookCount(author.name) }}
@@ -171,9 +187,9 @@ async function handleDelete(id: string) {
                     ></div>
                   </div>
                 </div>
-              </td>
+              </TableCell>
 
-              <td class="px-6 py-4">
+              <TableCell class="px-6 py-4 text-right">
                 <div class="flex justify-end gap-2">
                   <Button
                     variant="ghost"
@@ -192,18 +208,18 @@ async function handleDelete(id: string) {
                     <Trash2 class="w-4 h-4" />
                   </Button>
                 </div>
-              </td>
-            </tr>
-            <tr v-if="filteredAuthors.length === 0">
-              <td
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="filteredAuthors.length === 0">
+              <TableCell
                 colspan="5"
                 class="px-6 py-8 text-center text-sm text-slate-500 border-t border-slate-800"
               >
-                No books found. Use the Add Books button to create one.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                No authors found. Use the Add Author button to create one.
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@ import type {
   UpdateAuthorInput,
 } from "@/models/author";
 import { updateBooksAuthorName } from "@/services/bookService";
-import fetchAuthor from "../../author.json";
+import { fetchAuthor } from "../constants/authors.constant";
 
 const STORAGE_KEY = "author-data:authors";
 

@@ -1,5 +1,5 @@
 import type { Book, NewBookInput, UpdateBookInput } from "@/models/book";
-import fetchBook from "../../book.json";
+import {fetchBook} from "../constants/books.constant";
 
 const STORAGE_KEY = "book-library:books";
 
@@ -7,8 +7,6 @@ function loadBooks(): Book[] {
   const raw = window.localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     const parsed = fetchBook as Book[];
-    console.log(parsed);
-
     return Array.isArray(parsed) ? parsed : [];
   }
   try {

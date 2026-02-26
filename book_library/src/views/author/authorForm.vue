@@ -23,16 +23,11 @@ import {
   parseDate,
   type DateValue,
 } from "@internationalized/date";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import { addAuthor, getAuthor, updateAuthor } from "@/services/authorService";
-import type {
-  Author,
-  NewAuthorInput,
-  UpdateAuthorInput,
-} from "@/models/author";
+import type { Author, NewAuthorInput } from "@/models/author";
 import type { Book } from "@/models/book";
 import { getBooks } from "@/services/bookService";
+import { BASE_NATIONALITIES } from "@/constants/author";
 
 const props = withDefaults(
   defineProps<{
@@ -77,11 +72,11 @@ const authorBookCounts = computed(() => {
   return counts;
 });
 
-function getAuthorBookCount(name: string) {
+function getAuthorBookCount(name: string): number {
   return authorBookCounts.value[name.toLowerCase()] ?? 0;
 }
 
-function handleDateInput(val: string | number) {
+function handleDateInput(val: string | number): void {
   const str = String(val);
   // Only allow digits
   const digits = str.replace(/\D/g, "");
@@ -127,11 +122,6 @@ const dateValue = computed({
   },
 });
 
-const formattedDate = computed(() => {
-  if (!form.value.dateOfBirth) return "YYYY-MM-DD";
-  return form.value.dateOfBirth;
-});
-
 watch(
   () => props.initialAuthor,
   (value) => {
@@ -149,21 +139,7 @@ watch(
 onMounted(async () => {
   const authors = await getAuthor();
   await loadBooks();
-  const baseNationalities = [
-    "American",
-    "British",
-    "Canadian",
-    "Australian",
-    "Indian",
-    "Irish",
-    "French",
-    "German",
-    "Spanish",
-    "Italian",
-    "Japanese",
-    "Chinese",
-    "Korean",
-  ];
+  const baseNationalities = BASE_NATIONALITIES;
   const fromAuthors = authors
     .map((author) => author.nationality?.trim())
     .filter((value): value is string => Boolean(value));
@@ -190,61 +166,40 @@ function validate(): boolean {
   return Object.keys(next).length === 0;
 }
 
-async function handleSubmit() {
+async function handleSubmit(): Promise<void> {
   if (!validate()) {
     return;
   }
 
   isSubmitting.value = true;
   try {
-    if (props.mode === "edit" && props.initialAuthor) {
-      const changes: UpdateAuthorInput = {
-        name: form.value.name.trim(),
-        nationality: form.value.nationality.trim(),
-        bio: form.value.bio.trim(),
-        imgUrl: form.value.imgUrl || undefined,
-        genre: form.value.genre.trim(),
-        dateOfBirth: form.value.dateOfBirth.trim(),
-      };
-      console.log(changes);
+    const payload: NewAuthorInput = {
+      name: form.value.name.trim(),
+      nationality: form.value.nationality.trim(),
+      bio: form.value.bio.trim(),
+      imgUrl: form.value.imgUrl || undefined,
+      genre: form.value.genre.trim(),
+      dateOfBirth: form.value.dateOfBirth.trim(),
+    };
 
-      await updateAuthor(props.initialAuthor.id, changes);
-    } else {
-      const payload: NewAuthorInput = {
-        name: form.value.name.trim(),
-        nationality: form.value.nationality.trim(),
-        bio: form.value.bio.trim(),
-        imgUrl: form.value.imgUrl || undefined,
-        dateOfBirth: form.value.dateOfBirth.trim(),
-        genre: form.value.genre.trim(),
-      };
-
-      await addAuthor(payload);
-    }
+    props.initialAuthor?.id && props.mode === "edit"
+      ? await updateAuthor(props.initialAuthor.id, payload)
+      : await addAuthor(payload);
     router.push("/authors");
   } finally {
     isSubmitting.value = false;
   }
 }
 
-function handleCancel() {
+function handleCancel(): void {
   router.back();
 }
 
-function openFilePicker() {
+function openFilePicker(): void {
   fileInputRef.value?.click();
 }
 
-function readFileAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-async function handleFile(file: File) {
+async function handleFile(file: File): Promise<void> {
   if (!file.type.startsWith("image/")) {
     errors.value = { ...errors.value, imgUrl: "Please select an image file" };
     return;
@@ -252,10 +207,10 @@ async function handleFile(file: File) {
   errors.value = Object.fromEntries(
     Object.entries(errors.value).filter(([key]) => key !== "imgUrl"),
   );
-  form.value.imgUrl = await readFileAsDataUrl(file);
+  form.value.imgUrl = URL.createObjectURL(file);
 }
 
-async function handleFileChange(event: Event) {
+async function handleFileChange(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   if (file) {
@@ -264,7 +219,7 @@ async function handleFileChange(event: Event) {
   input.value = "";
 }
 
-async function handleDrop(event: DragEvent) {
+async function handleDrop(event: DragEvent): Promise<void> {
   event.preventDefault();
   isDragActive.value = false;
   const file = event.dataTransfer?.files?.[0];
@@ -273,21 +228,20 @@ async function handleDrop(event: DragEvent) {
   }
 }
 
-function handleDragOver(event: DragEvent) {
+function handleDragOver(event: DragEvent): void {
   event.preventDefault();
   isDragActive.value = true;
 }
 
-function handleDragLeave() {
+function handleDragLeave(): void {
   isDragActive.value = false;
 }
 
-function handleBool(result: boolean) {
+function handleBool(result: boolean): void {
   isEdit.value = result;
-  console.log(isEdit.value + "This is bool string");
 }
 
-onMounted(async () => {
+onMounted(() => {
   if (props.mode === "edit") {
     handleBool(props.mode === "edit");
   }
@@ -316,7 +270,7 @@ const lastUpdatedText = computed(() => {
     :class="[isEdit ? 'bg-transparent border-none' : 'bg-brand-card']"
   >
     <div class="space-y-4" :class="[isEdit ? 'hidden' : '']">
-      <h2 class="text-[20px] font-semibold text-slate-200">Author Portrait</h2>
+      <h2 class="text-xl font-semibold text-slate-200">Author Portrait</h2>
       <div
         class="flex flex-col items-center justify-center rounded-xl border border-dashed px-6 py-8 text-center transition"
         :class="[
@@ -358,7 +312,7 @@ const lastUpdatedText = computed(() => {
 
         <div
           v-if="form.imgUrl"
-          class="mt-5 w-[160px] h-[150px] max-w-sm bg-brand-cover-placeholder p-5 rounded-sm bg-cover bg-center"
+          class="mt-5 w-40 h-40 max-w-sm p-5 rounded-sm bg-cover bg-center"
           :style="{ backgroundImage: `url(${form.imgUrl})` }"
         ></div>
 

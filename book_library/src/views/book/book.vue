@@ -2,11 +2,17 @@
 import { computed, onMounted, ref } from "vue";
 import type { Book } from "@/models/book";
 import { deleteBook, getBooks } from "@/services/bookService";
-import { Pencil, Trash2, Book as BookIcon } from "lucide-vue-next";
+import { Pencil, Trash2 } from "lucide-vue-next";
 import Button from "@/components/ui/button/Button.vue";
 import { useRouter } from "vue-router";
 import BookDirectory from "../book_directory.vue";
 import Input from "@/components/ui/input/Input.vue";
+import Table from "@/components/ui/table/Table.vue";
+import TableHeader from "@/components/ui/table/TableHeader.vue";
+import TableRow from "@/components/ui/table/TableRow.vue";
+import TableHead from "@/components/ui/table/TableHead.vue";
+import TableBody from "@/components/ui/table/TableBody.vue";
+import TableCell from "@/components/ui/table/TableCell.vue";
 
 const router = useRouter();
 const books = ref<Book[]>([]);
@@ -29,7 +35,7 @@ const filteredBooks = computed(() => {
   });
 });
 
-async function loadBooks() {
+async function loadBooks(): Promise<void> {
   books.value = await getBooks();
 }
 
@@ -37,12 +43,12 @@ onMounted(async () => {
   await loadBooks();
 });
 
-async function handleDelete(id: string) {
+async function handleDelete(id: string): Promise<void> {
   await deleteBook(id);
   await loadBooks();
 }
 
-function goToEdit(id: string) {
+function goToEdit(id: string): void {
   router.push(`/books/${id}/edit`);
 }
 </script>
@@ -70,25 +76,35 @@ function goToEdit(id: string) {
       <div
         class="w-full overflow-hidden rounded-2xl border border-slate-800 bg-brand-table"
       >
-        <table class="w-full border-collapse">
-          <thead>
-            <tr
-              class="text-xs font-medium uppercase tracking-wide text-slate-400"
+        <Table class="w-full border-collapse">
+          <TableHeader>
+            <TableRow
+              class="text-xs font-medium uppercase tracking-wide text-slate-400 border-b border-slate-800 hover:bg-transparent"
             >
-              <th class="px-6 py-3 text-left font-medium">Title</th>
-              <th class="px-6 py-3 text-left font-medium">Author</th>
-              <th class="px-6 py-3 text-left font-medium">Category</th>
-              <th class="px-6 py-3 text-left font-medium">Status</th>
-              <th class="px-6 py-3 text-right font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Title</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Author</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Category</TableHead
+              >
+              <TableHead class="px-6 py-3 text-left font-medium text-slate-400"
+                >Status</TableHead
+              >
+              <TableHead class="px-6 py-3 text-right font-medium text-slate-400"
+                >Actions</TableHead
+              >
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow
               v-for="book in filteredBooks"
               :key="book.id"
               class="bg-brand-input hover:bg-brand-table transition-colors border-t border-slate-800"
             >
-              <td class="px-6 py-4">
+              <TableCell class="px-6 py-4">
                 <div class="flex items-center gap-4">
                   <div
                     class="flex relative h-16 w-12 items-center justify-center rounded-md text-slate-500 text-xs"
@@ -118,20 +134,20 @@ function goToEdit(id: string) {
                     </span>
                   </div>
                 </div>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <span class="text-sm text-slate-100">
                   {{ book.author }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <span
                   class="inline-flex rounded-full bg-slate-800/60 px-3 py-1 text-xs font-medium text-slate-200"
                 >
                   {{ book.category }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <span
                   :class="[
                     'inline-flex rounded-full px-3 py-1 text-xs font-semibold',
@@ -144,8 +160,8 @@ function goToEdit(id: string) {
                 >
                   {{ book.status.toUpperCase() }}
                 </span>
-              </td>
-              <td class="px-6 py-4">
+              </TableCell>
+              <TableCell class="px-6 py-4">
                 <div class="flex justify-end gap-2">
                   <Button
                     variant="ghost"
@@ -164,18 +180,18 @@ function goToEdit(id: string) {
                     <Trash2 class="w-4 h-4" />
                   </Button>
                 </div>
-              </td>
-            </tr>
-            <tr v-if="filteredBooks.length === 0">
-              <td
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="filteredBooks.length === 0">
+              <TableCell
                 colspan="5"
                 class="px-6 py-8 text-center text-sm text-slate-500 border-t border-slate-800"
               >
                 No books found. Use the Add Books button to create one.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </div>
   </div>

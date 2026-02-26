@@ -25,42 +25,26 @@ function isClick() {
 
 <template>
   <div
-    class="w-full h-20 flex flex-col items-center justify-center"
-    :style="{ backgroundColor: colors.background.main }"
+    class="w-full h-20 flex flex-col items-center justify-center bg-brand-main"
   >
-    <div
-      class="h-[1px] w-full"
-      :style="{ backgroundColor: colors.background.tip }"
-    ></div>
-    <div class="w-[80%] h-[80%] flex items-center justify-between">
+    <div class="h-[1px] w-full bg-brand-tip"></div>
+    <div class="w-4/5 h-4/5 flex items-center justify-between">
       <div class="flex items-center">
-        <h2 class="text-sm font-normal" :style="{ color: colors.text.muted }">
+        <h2 class="text-sm font-normal text-brand-muted">
           © 2026 Library Management System. All rights reserved.
         </h2>
       </div>
 
       <div class="w-16"></div>
 
-      <div
-        class="flex gap-6 font-medium"
-        :style="{ color: colors.text.mutedDark }"
-      >
-        <span
-          class="cursor-pointer text-sm font-normal"
-          :style="{ color: colors.text.muted }"
-        >
+      <div class="flex gap-6 font-medium text-brand-muted">
+        <span class="cursor-pointer text-sm font-normal text-brand-muted">
           Terms of Service
         </span>
-        <span
-          class="cursor-pointer text-sm font-normal"
-          :style="{ color: colors.text.muted }"
-        >
+        <span class="cursor-pointer text-sm font-normal text-brand-muted">
           Privacy
         </span>
-        <span
-          class="cursor-pointer text-sm font-normal"
-          :style="{ color: colors.text.muted }"
-        >
+        <span class="cursor-pointer text-sm font-normal text-brand-muted">
           Categories
         </span>
       </div>

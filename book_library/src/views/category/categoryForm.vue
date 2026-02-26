@@ -1,31 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Input from "@/components/ui/input/Input.vue";
 import Button from "@/components/ui/button/Button.vue";
 import { useRouter } from "vue-router";
-import {
-  BadgeCheck,
-  Camera,
-  CheckIcon,
-  ChevronDown,
-  CloudUploadIcon,
-  PlusIcon,
-  Save,
-  Upload,
-} from "lucide-vue-next";
-import { addAuthor, getAuthor, updateAuthor } from "@/services/authorService";
-import type {
-  Author,
-  NewAuthorInput,
-  UpdateAuthorInput,
-} from "@/models/author";
-import type { Book } from "@/models/book";
-import { getBooks } from "@/services/bookService";
-import type {
-  Category,
-  NewCategoryInput,
-  UpdateCategoryInput,
-} from "@/models/category";
+import { CheckIcon, PlusIcon } from "lucide-vue-next";
+import type { Category, NewCategoryInput } from "@/models/category";
 import { addCategory, updateCategory } from "@/services/categoryService";
 import Switch from "@/components/ui/switch/Switch.vue";
 
@@ -42,10 +21,6 @@ const props = withDefaults(
 );
 
 const router = useRouter();
-const books = ref<Book[]>([]);
-async function loadBooks() {
-  books.value = await getBooks();
-}
 
 const form = ref({
   name: "",
@@ -80,56 +55,40 @@ function validate(): boolean {
   return Object.keys(next).length === 0;
 }
 
-async function handleSubmit() {
+async function handleSubmit(): Promise<void> {
   if (!validate()) {
     return;
   }
 
   isSubmitting.value = true;
   try {
-    if (props.mode === "edit" && props.initialCategory) {
-      const changes: UpdateCategoryInput = {
-        name: form.value.name.trim(),
-        description: form.value.description.trim(),
-        activeStatus: form.value.activeStatus,
-      };
-      console.log(changes);
-
-      await updateCategory(props.initialCategory.id, changes);
-    } else {
-      const payload: NewCategoryInput = {
-        name: form.value.name.trim(),
-        description: form.value.description.trim(),
-        activeStatus: true,
-      };
-
-      await addCategory(payload);
-    }
+    const payload: NewCategoryInput = {
+      name: form.value.name.trim(),
+      description: form.value.description.trim(),
+      activeStatus: props.mode === "edit" ? form.value.activeStatus : true,
+    };
+    props.initialCategory?.id && props.mode === "edit"
+      ? await updateCategory(props.initialCategory.id, payload)
+      : await addCategory(payload);
     router.push("/categories");
   } finally {
     isSubmitting.value = false;
   }
 }
 
-function handleCancel() {
+function handleCancel(): void {
   router.back();
 }
 
-function handleBool(result: boolean) {
+function handleBool(result: boolean): void {
   isEdit.value = result;
-  console.log(isEdit.value + "This is bool string");
 }
 
-onMounted(async () => {
+onMounted(() => {
   if (props.mode === "edit") {
     handleBool(props.mode === "edit");
   }
 });
-
-/* const lastUpdatedText = computed(() => {
-  if (!props?.updatedAt) return "Unknown";
-  return formatRelativeTime(props.updatedAt ?? "");
-}); */
 </script>
 
 <template>

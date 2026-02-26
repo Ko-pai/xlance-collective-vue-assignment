@@ -2,13 +2,8 @@
 import { onMounted, ref, watch } from "vue";
 import Input from "@/components/ui/input/Input.vue";
 import Button from "@/components/ui/button/Button.vue";
-import type {
-  Book,
-  BookStatus,
-  NewBookInput,
-  UpdateBookInput,
-} from "@/models/book";
-import { addBook, getBooks, updateBook } from "@/services/bookService";
+import type { Book, BookStatus, NewBookInput } from "@/models/book";
+import { addBook, updateBook } from "@/services/bookService";
 import { useRouter } from "vue-router";
 import {
   BadgeCheck,
@@ -19,7 +14,6 @@ import {
 } from "lucide-vue-next";
 import { getAuthor } from "@/services/authorService";
 import { getCategories } from "@/services/categoryService";
-import { f } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 const props = withDefaults(
   defineProps<{
@@ -111,53 +105,38 @@ function validate(): boolean {
   return Object.keys(next).length === 0;
 }
 
-async function handleSubmit() {
+async function handleSubmit(): Promise<void> {
   if (!validate()) {
     return;
   }
 
   isSubmitting.value = true;
   try {
-    if (props.mode === "edit" && props.initialBook) {
-      const changes: UpdateBookInput = {
-        title: form.value.title.trim(),
-        author: form.value.author.trim(),
-        category: form.value.category.trim(),
-        status: form.value.status,
-        publishedYear: form.value.publishedYear
-          ? Number(form.value.publishedYear)
-          : undefined,
-        imgUrl: form.value.imgUrl || undefined,
-        summary: form.value.summary || undefined,
-      };
-
-      await updateBook(props.initialBook.id, changes);
-    } else {
-      const payload: NewBookInput = {
-        title: form.value.title.trim(),
-        author: form.value.author.trim(),
-        category: form.value.category.trim(),
-        status: form.value.status,
-        publishedYear: form.value.publishedYear
-          ? Number(form.value.publishedYear)
-          : undefined,
-        imgUrl: form.value.imgUrl || undefined,
-        summary: form.value.summary || undefined,
-      };
-
-      await addBook(payload);
-    }
+    const payload: NewBookInput = {
+      title: form.value.title.trim(),
+      author: form.value.author.trim(),
+      category: form.value.category.trim(),
+      status: form.value.status,
+      publishedYear: form.value.publishedYear
+        ? Number(form.value.publishedYear)
+        : undefined,
+      imgUrl: form.value.imgUrl || undefined,
+      summary: form.value.summary || undefined,
+    };
+    props.initialBook?.id && props.mode === "edit"
+      ? await updateBook(props.initialBook.id, payload)
+      : await addBook(payload);
     router.push("/books");
   } finally {
     isSubmitting.value = false;
   }
 }
 
-function handleCancel() {
+function handleCancel(): void {
   router.back();
 }
 
-function openFilePicker() {
+function openFilePicker(): void {
   fileInputRef.value?.click();
 }
 
@@ -170,7 +149,7 @@ function readFileAsDataUrl(file: File): Promise<string> {
   });
 }
 
-async function handleFile(file: File) {
+async function handleFile(file: File): Promise<void> {
   if (!file.type.startsWith("image/")) {
     errors.value = { ...errors.value, imgUrl: "Please select an image file" };
     return;
@@ -181,7 +160,7 @@ async function handleFile(file: File) {
   form.value.imgUrl = await readFileAsDataUrl(file);
 }
 
-async function handleFileChange(event: Event) {
+async function handleFileChange(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   if (file) {
@@ -190,7 +169,7 @@ async function handleFileChange(event: Event) {
   input.value = "";
 }
 
-async function handleDrop(event: DragEvent) {
+async function handleDrop(event: DragEvent): Promise<void> {
   event.preventDefault();
   isDragActive.value = false;
   const file = event.dataTransfer?.files?.[0];
@@ -199,21 +178,20 @@ async function handleDrop(event: DragEvent) {
   }
 }
 
-function handleDragOver(event: DragEvent) {
+function handleDragOver(event: DragEvent): void {
   event.preventDefault();
   isDragActive.value = true;
 }
 
-function handleDragLeave() {
+function handleDragLeave(): void {
   isDragActive.value = false;
 }
 
-function handleBool(result: boolean) {
+function handleBool(result: boolean): void {
   isEdit.value = result;
-  console.log(isEdit.value + "This is bool string");
 }
 
-onMounted(async () => {
+onMounted(() => {
   if (props.mode === "edit") {
     handleBool(props.mode === "edit");
   }
@@ -340,7 +318,7 @@ onMounted(async () => {
 
         <div
           v-if="form.imgUrl"
-          class="mt-5 w-[160px] h-[150px] max-w-sm bg-brand-cover-placeholder p-5 rounded-sm bg-cover bg-center"
+          class="mt-5 w-32 h-32 max-w-sm bg-brand-cover-placeholder p-5 rounded-sm bg-cover bg-center"
           :style="{ backgroundImage: `url(${form.imgUrl})` }"
         ></div>
 
@@ -382,10 +360,7 @@ onMounted(async () => {
       >
         Update the core details and categorization for this title.
       </p>
-      <hr
-        class="my-4 border-gray-700"
-        :class="[isEdit ? '' : 'hidden']"
-      />
+      <hr class="my-4 border-gray-700" :class="[isEdit ? '' : 'hidden']" />
 
       <div class="space-y-4" :class="[isEdit ? '' : 'mt-4']">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -506,7 +481,7 @@ onMounted(async () => {
 
       <div class="mt-8 space-y-3">
         <h2
-          class=" font-semibold text-slate-200"
+          class="font-semibold text-slate-200"
           :class="[isEdit ? 'text-[14px]' : 'text-[20px]']"
         >
           Description {{ isEdit ? "/ Summary" : "" }}
