@@ -20,7 +20,7 @@ onMounted(async () => {
   book.value = await getBookById(bookId);
 });
 
-function onBackLibrary() {
+function onBackLibrary(): void {
   router.back();
 }
 
@@ -41,7 +41,7 @@ const lastUpdatedText = computed(() => {
   return formatDateTime(book.value.updatedAt);
 });
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 </script>
@@ -54,12 +54,13 @@ function isActive(path: string) {
       <Breadcrumb class="">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/categories"
-              class="hover:text-white"
-              :class="isActive('/categories') ? 'text-white' : ''"
-            >
-              Categories
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/books') ? 'text-white' : ''"
+                to="/books"
+                >Books</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

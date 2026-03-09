@@ -11,11 +11,11 @@ import NewBookForm from "./newBookForm.vue";
 const route = useRoute();
 const router = useRouter();
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 
-function goto() {
+function goto(): void {
   router.back();
 }
 </script>
@@ -26,19 +26,20 @@ function goto() {
       <Breadcrumb class="px-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/books"
-              class="hover:text-white"
-              :class="isActive('/books') ? 'text-white' : ''"
-            >
-              Books
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/books') ? 'text-white' : ''"
+                to="/books"
+                >Books</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
               class="hover:text-white cursor-pointer"
-              :class="isActive('/addBook') ? 'text-white' : ''"
+              :class="isActive('/books/add') ? 'text-white' : ''"
               >Add New Book</BreadcrumbLink
             >
           </BreadcrumbItem>
@@ -47,13 +48,13 @@ function goto() {
 
       <div class="h-12"></div>
 
-      <div class="flex flex-col gap-6 ml-4">
+      <div class="flex flex-col gap-6">
         <div class="flex justify-center bg-brand-main">
           <div class="w-full max-w-7xl h-full">
             <div
               class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
             >
-              <div class="flex flex-col gap-2 max-w-xl">
+              <div class="flex flex-col gap-2 max-w-xl px-4">
                 <h1 class="text-2xl md:text-4xl text-white font-semibold">
                   Add New Book
                 </h1>

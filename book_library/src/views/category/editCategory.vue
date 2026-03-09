@@ -8,7 +8,6 @@ import BreadcrumbSeparator from "@/components/ui/breadcrumb/BreadcrumbSeparator.
 import type { Category } from "@/models/category";
 import { getCategoriesById } from "@/services/categoryService";
 import CategoryForm from "./categoryForm.vue";
-import { CATEGORY_BREADCRUMBS } from "@/constants/breadcrumbs";
 
 const route = useRoute();
 const router = useRouter();
@@ -20,11 +19,11 @@ onMounted(async () => {
   category.value = await getCategoriesById(categoryId);
 });
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 
-function onBackToCategoriesList() {
+function onBackToCategoriesList(): void {
   router.back();
 }
 </script>
@@ -37,12 +36,13 @@ function onBackToCategoriesList() {
       <Breadcrumb class="">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/categories"
-              class="hover:text-white"
-              :class="isActive('/categories') ? 'text-white' : ''"
-            >
-              Categories
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/categories') ? 'text-white' : ''"
+                to="/categories"
+                >Categories</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -59,8 +59,10 @@ function onBackToCategoriesList() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div class="flex bg-red w-full mt-10" style="justify-content: space-between">
-        <div>
+      <div
+        class="flex w-full mt-10 flex-col gap-4 md:flex-row md:items-center md:justify-between"
+      >
+        <div class="max-w-xl">
           <h1 class="text-2xl font-bold text-white mb-2">
             Edit Category: {{ category?.name }}
           </h1>
@@ -71,7 +73,7 @@ function onBackToCategoriesList() {
             >
           </div>
         </div>
-        <div>
+        <div class="w-full md:w-auto flex justify-start md:justify-end">
           <button
             class="w-full md:w-40 h-10 bg-brand-primary text-white flex items-center justify-center rounded-lg text-sm md:text-base font-medium"
             @click="onBackToCategoriesList"

@@ -10,41 +10,29 @@ import { colors } from "@/utils/colors";
 const router = useRouter();
 const route = useRoute();
 
-/* function goTo(path) {
-  router.push(path);
-}
-
-function isActive(path) {
-  return route.path === path;
-}
-
-function isClick() {
-  console.log("Hello World");
-} */
 </script>
 
 <template>
-  <div
-    class="w-full h-20 flex flex-col items-center justify-center bg-brand-main"
-  >
+  <div class="w-full bg-brand-main flex flex-col items-center">
     <div class="h-[1px] w-full bg-brand-tip"></div>
-    <div class="w-4/5 h-4/5 flex items-center justify-between">
-      <div class="flex items-center">
-        <h2 class="text-sm font-normal text-brand-muted">
+    <div
+      class="w-full max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-4"
+    >
+      <div class="flex items-center justify-center sm:justify-start">
+        <h2 class="text-xs sm:text-sm font-normal text-brand-muted text-center">
           © 2026 Library Management System. All rights reserved.
         </h2>
       </div>
-
-      <div class="w-16"></div>
-
-      <div class="flex gap-6 font-medium text-brand-muted">
-        <span class="cursor-pointer text-sm font-normal text-brand-muted">
+      <div
+        class="flex flex-wrap justify-center sm:justify-end gap-x-4 gap-y-2 font-medium text-brand-muted text-xs sm:text-sm"
+      >
+        <span class="cursor-pointer font-normal text-brand-muted">
           Terms of Service
         </span>
-        <span class="cursor-pointer text-sm font-normal text-brand-muted">
+        <span class="cursor-pointer font-normal text-brand-muted">
           Privacy
         </span>
-        <span class="cursor-pointer text-sm font-normal text-brand-muted">
+        <span class="cursor-pointer font-normal text-brand-muted">
           Categories
         </span>
       </div>

@@ -11,11 +11,11 @@ import AuthorForm from "./authorForm.vue";
 const route = useRoute();
 const router = useRouter();
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 
-function goto() {
+function goto(): void {
   router.back();
 }
 </script>
@@ -26,19 +26,20 @@ function goto() {
       <Breadcrumb class="px-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/authors"
-              class="hover:text-white"
-              :class="isActive('/authors') ? 'text-white' : ''"
-            >
-              Authors
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/authors') ? 'text-white' : ''"
+                to="/authors"
+                >Authors</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
               class="hover:text-white cursor-pointer"
-              :class="isActive('/addAuthor') ? 'text-white' : ''"
+              :class="isActive('/authors/add') ? 'text-white' : ''"
               >Add New Author</BreadcrumbLink
             >
           </BreadcrumbItem>

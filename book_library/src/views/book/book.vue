@@ -193,6 +193,8 @@ function goToEdit(id: string): void {
           </TableBody>
         </Table>
       </div>
+
+      <router-view />
     </div>
   </div>
 </template>

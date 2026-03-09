@@ -11,11 +11,11 @@ import CategoryForm from "./categoryForm.vue";
 const route = useRoute();
 const router = useRouter();
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 
-function goto() {
+function goto(): void {
   router.back();
 }
 </script>
@@ -26,19 +26,20 @@ function goto() {
       <Breadcrumb class="px-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/categories"
-              class="hover:text-white"
-              :class="isActive('/categories') ? 'text-white' : ''"
-            >
-              Categories
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/categories') ? 'text-white' : ''"
+                to="/categories"
+                >Categories</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
               class="hover:text-white cursor-pointer"
-              :class="isActive('/addCategory') ? 'text-white' : ''"
+              :class="isActive('/categories/add') ? 'text-white' : ''"
               >Add New Category</BreadcrumbLink
             >
           </BreadcrumbItem>

@@ -19,11 +19,11 @@ onMounted(async () => {
   author.value = await getAuthorsById(authorId);
 });
 
-function onBackToAuthorList() {
+function onBackToAuthorList(): void {
   router.back();
 }
 
-function isActive(path: string) {
+function isActive(path: string): boolean {
   return route.path === path;
 }
 </script>
@@ -36,12 +36,13 @@ function isActive(path: string) {
       <Breadcrumb class="">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/categories"
-              class="hover:text-white"
-              :class="isActive('/categories') ? 'text-white' : ''"
-            >
-              Categories
+            <BreadcrumbLink as-child>
+              <RouterLink
+                class="hover:text-white"
+                :class="isActive('/authors') ? 'text-white' : ''"
+                to="/authors"
+                >Authors</RouterLink
+              >
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

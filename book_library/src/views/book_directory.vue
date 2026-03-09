@@ -26,23 +26,26 @@ watch(
   },
 );
 
-function goTo(addBook: boolean) {
+function goTo(addBook: boolean): void {
   if (addBook) {
-    router.push("/addBook");
+    router.push({ name: "addBook" });
     return;
   }
 
   if (props.mode === "category") {
-    router.push("/addCategory");
+    router.push({ name: "addCategory" });
     return;
   }
 
-  router.push("/addAuthor");
+  router.push({ name: "addAuthor" });
 }
 </script>
 
 <template>
-  <div class="flex justify-center min-h-[calc(20vh)] bg-brand-main">
+  <div
+    class="flex justify-center min-h-[calc(20vh)] bg-brand-main"
+    :class="props.mode === 'book' ? 'mb-4' : ''"
+  >
     <div class="w-full max-w-7xl h-full mt-5">
       <div
         class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"

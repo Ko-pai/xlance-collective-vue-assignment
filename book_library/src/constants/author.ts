@@ -1,5 +1,5 @@
 export const MAX_AUTHOR_BOOKS = 30;
-export const BASE_NATIONALITIES = [
+export const BASE_NATIONALITIES: string[] = [
   "American",
   "British",
   "Canadian",

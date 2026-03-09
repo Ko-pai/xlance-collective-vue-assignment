@@ -21,11 +21,11 @@ const books = ref<Book[]>([]);
 const authors = ref<Author[]>([]);
 const searchQuery = ref("");
 
-async function loadBooks():Promise<void>  {
+async function loadBooks(): Promise<void> {
   books.value = await getBooks();
 }
 
-function goToEdit(id: string):void {
+function goToEdit(id: string): void {
   router.push(`/authors/${id}/editAuthor`);
 }
 
@@ -62,7 +62,7 @@ function getAuthorBookCount(name: string): number {
   return authorBookCounts.value[name.toLowerCase()] ?? 0;
 }
 
-function getAuthorBookProgressWidth(name: string):string {
+function getAuthorBookProgressWidth(name: string): string {
   const count = Math.min(getAuthorBookCount(name), MAX_AUTHOR_BOOKS);
   return `${Math.round((count / MAX_AUTHOR_BOOKS) * 100)}%`;
 }
@@ -221,6 +221,7 @@ function formatAuthorName(name: string): string {
           </TableBody>
         </Table>
       </div>
+      <router-view />
     </div>
   </div>
 </template>

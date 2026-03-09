@@ -4,7 +4,7 @@ import HeadBar from "./views/headBar.vue";
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#101922]">
+  <div class="min-h-screen flex flex-col bg-brand-main">
     <HeadBar />
     <div class="flex-1">
       <router-view />
